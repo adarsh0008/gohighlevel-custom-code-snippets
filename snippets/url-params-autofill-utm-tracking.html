@@ -1,0 +1,55 @@
+<!--
+  GoHighLevel: URL parameter autofill + UTM tracking
+  ---------------------------------------------------
+  - Auto-fills any form field whose name matches a URL parameter
+    e.g. ?first_name=John&email=john@site.com
+  - Saves UTM / click IDs for the whole session, so they are still
+    filled on step 2, 3... of a multi-step funnel
+  - Works with forms that load late (uses a MutationObserver)
+
+  Where to paste: Funnel/Website settings > Tracking Code > Footer Code
+  (or a Custom JS/HTML element on the page)
+
+  Author: Adarsh Shukla - https://github.com/adarsh0008
+-->
+<script>
+(function () {
+  var TRACKING_KEYS = ["utm_source", "utm_medium", "utm_campaign", "utm_term", "utm_content", "gclid", "fbclid"];
+  var STORAGE_KEY = "ghl_tracking_params";
+  var params = new URLSearchParams(window.location.search);
+
+  // 1) Persist tracking params for this browser session
+  var saved = {};
+  try { saved = JSON.parse(sessionStorage.getItem(STORAGE_KEY) || "{}"); } catch (e) {}
+  TRACKING_KEYS.forEach(function (key) {
+    if (params.get(key)) saved[key] = params.get(key);
+  });
+  try { sessionStorage.setItem(STORAGE_KEY, JSON.stringify(saved)); } catch (e) {}
+
+  // 2) Values to fill = saved tracking params + everything in the current URL
+  var values = Object.assign({}, saved);
+  params.forEach(function (value, key) { values[key] = value; });
+  if (!Object.keys(values).length) return;
+
+  // Set the value in a way that frameworks (Vue/React) also notice
+  function setValue(el, value) {
+    var proto = el.tagName === "TEXTAREA" ? HTMLTextAreaElement.prototype : HTMLInputElement.prototype;
+    var setter = Object.getOwnPropertyDescriptor(proto, "value").set;
+    setter.call(el, value);
+    el.dispatchEvent(new Event("input", { bubbles: true }));
+    el.dispatchEvent(new Event("change", { bubbles: true }));
+  }
+
+  function fill() {
+    Object.keys(values).forEach(function (key) {
+      var selector = 'input[name="' + CSS.escape(key) + '"], textarea[name="' + CSS.escape(key) + '"]';
+      document.querySelectorAll(selector).forEach(function (el) {
+        if (!el.value) setValue(el, values[key]); // never overwrite what the visitor typed
+      });
+    });
+  }
+
+  fill();
+  new MutationObserver(fill).observe(document.body, { childList: true, subtree: true });
+})();
+</script>
