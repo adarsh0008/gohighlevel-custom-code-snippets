@@ -1,0 +1,90 @@
+<!--
+  GoHighLevel: Sticky mobile call-to-action bar
+  --------------------------------------------
+  Shows a fixed "Call / Book now" bar at the bottom of the screen on mobile
+  after the visitor scrolls a little. Hidden on desktop.
+
+  Where to paste: Funnel/Website settings > Tracking Code > Footer Code
+  Change the phone number, button text and booking link below.
+
+  Author: Adarsh Shukla - https://github.com/adarsh0008
+-->
+<div id="ghl-sticky-cta" class="ghl-sticky-cta">
+  <a class="ghl-cta-call" href="tel:+10000000000">📞 Call Now</a>
+  <a class="ghl-cta-book" href="#booking">📅 Book Free Call</a>
+</div>
+
+<style>
+  .ghl-sticky-cta {
+    position: fixed; left: 0; right: 0; bottom: 0; z-index: 9999;
+    display: none; gap: 8px; padding: 10px 12px calc(10px + env(safe-area-inset-bottom, 0px));
+    background: #ffffff; box-shadow: 0 -4px 16px rgba(0, 0, 0, 0.12);
+    transform: translateY(110%); transition: transform 0.3s ease;
+  }
+  .ghl-sticky-cta.is-visible { transform: translateY(0); }
+  .ghl-sticky-cta a {
+    flex: 1; text-align: center; padding: 12px; border-radius: 8px;
+    font-weight: 700; font-size: 15px; text-decoration: none;
+  }
+  .ghl-cta-call { background: #111827; color: #ffffff; }
+  .ghl-cta-book { background: #22c55e; color: #ffffff; }
+  @media (max-width: 767px) { .ghl-sticky-cta { display: flex; } }
+</style>
+
+<script>
+(function () {
+  var SHOW_AFTER_PX = 300;
+  var bar = document.getElementById("ghl-sticky-cta");
+  if (!bar) return;
+  function onScroll() {
+    bar.classList.toggle("is-visible", window.scrollY > SHOW_AFTER_PX);
+  }
+  window.addEventListener("scroll", onScroll, { passive: true });
+  onScroll();
+})();
+</script>
+<!--
+  GoHighLevel: Sticky mobile call-to-action bar
+  --------------------------------------------
+  Shows a fixed "Call / Book now" bar at the bottom of the screen on mobile
+  after the visitor scrolls a little. Hidden on desktop.
+
+  Where to paste: Funnel/Website settings > Tracking Code > Footer Code
+  Change the phone number, button text and booking link below.
+
+  Author: Adarsh Shukla - https://github.com/adarsh0008
+-->
+<div id="ghl-sticky-cta" class="ghl-sticky-cta">
+  <a class="ghl-cta-call" href="tel:+10000000000">📞 Call Now</a>
+  <a class="ghl-cta-book" href="#booking">📅 Book Free Call</a>
+</div>
+
+<style>
+  .ghl-sticky-cta {
+    position: fixed; left: 0; right: 0; bottom: 0; z-index: 9999;
+    display: none; gap: 8px; padding: 10px 12px calc(10px + env(safe-area-inset-bottom, 0px));
+    background: #ffffff; box-shadow: 0 -4px 16px rgba(0, 0, 0, 0.12);
+    transform: translateY(110%); transition: transform 0.3s ease;
+  }
+  .ghl-sticky-cta.is-visible { transform: translateY(0); }
+  .ghl-sticky-cta a {
+    flex: 1; text-align: center; padding: 12px; border-radius: 8px;
+    font-weight: 700; font-size: 15px; text-decoration: none;
+  }
+  .ghl-cta-call { background: #111827; color: #ffffff; }
+  .ghl-cta-book { background: #22c55e; color: #ffffff; }
+  @media (max-width: 767px) { .ghl-sticky-cta { display: flex; } }
+</style>
+
+<script>
+(function () {
+  var SHOW_AFTER_PX = 300;
+  var bar = document.getElementById("ghl-sticky-cta");
+  if (!bar) return;
+  function onScroll() {
+    bar.classList.toggle("is-visible", window.scrollY > SHOW_AFTER_PX);
+  }
+  window.addEventListener("scroll", onScroll, { passive: true });
+  onScroll();
+})();
+</script>
