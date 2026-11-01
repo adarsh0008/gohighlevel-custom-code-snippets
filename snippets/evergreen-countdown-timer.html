@@ -1,0 +1,59 @@
+<!--
+  GoHighLevel: Evergreen countdown timer
+  -------------------------------------
+  Each visitor gets their own deadline (e.g. 24 hours from their first visit),
+  remembered in their browser. Great for limited-time offers on funnel pages.
+
+  Where to paste: add a "Custom JS/HTML" element on your funnel page.
+  Change DURATION_HOURS and EXPIRED_TEXT below.
+
+  Author: Adarsh Shukla - https://github.com/adarsh0008
+-->
+<div id="ghl-countdown" class="ghl-countdown">
+  <div><span data-unit="hours">00</span><small>Hours</small></div>
+  <div><span data-unit="minutes">00</span><small>Minutes</small></div>
+  <div><span data-unit="seconds">00</span><small>Seconds</small></div>
+</div>
+
+<style>
+  .ghl-countdown { display: flex; gap: 12px; justify-content: center; font-family: inherit; }
+  .ghl-countdown div { background: #111827; color: #fff; border-radius: 10px; padding: 12px 16px; min-width: 72px; text-align: center; }
+  .ghl-countdown span { display: block; font-size: 32px; font-weight: 700; line-height: 1.1; }
+  .ghl-countdown small { font-size: 12px; opacity: 0.75; text-transform: uppercase; letter-spacing: 1px; }
+</style>
+
+<script>
+(function () {
+  var DURATION_HOURS = 24;
+  var EXPIRED_TEXT = "This offer has expired";
+  var STORAGE_KEY = "ghl_countdown_deadline_" + window.location.pathname;
+
+  var box = document.getElementById("ghl-countdown");
+  if (!box) return;
+
+  var deadline;
+  try { deadline = parseInt(localStorage.getItem(STORAGE_KEY), 10); } catch (e) {}
+  if (!deadline) {
+    deadline = Date.now() + DURATION_HOURS * 60 * 60 * 1000;
+    try { localStorage.setItem(STORAGE_KEY, String(deadline)); } catch (e) {}
+  }
+
+  function pad(n) { return String(n).padStart(2, "0"); }
+
+  function tick() {
+    var left = Math.max(0, deadline - Date.now());
+    if (left === 0) {
+      box.innerHTML = "<strong>" + EXPIRED_TEXT + "</strong>";
+      clearInterval(timer);
+      return;
+    }
+    var totalSeconds = Math.floor(left / 1000);
+    box.querySelector('[data-unit="hours"]').textContent = pad(Math.floor(totalSeconds / 3600));
+    box.querySelector('[data-unit="minutes"]').textContent = pad(Math.floor((totalSeconds % 3600) / 60));
+    box.querySelector('[data-unit="seconds"]').textContent = pad(totalSeconds % 60);
+  }
+
+  var timer = setInterval(tick, 1000);
+  tick();
+})();
+</script>
